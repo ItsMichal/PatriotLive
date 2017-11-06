@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CyPat Score Scraper</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js" integrity="sha256-N4u5BjTLNwmGul6RgLoESPNqDFVUibVuOYhP4gJgrew=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js" integrity="sha256-WPeFPWD3PZQUDrpFnDM1N2KadNVwCfNS4cCZ78b76T8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1 class="text-center">Cypat Scraper</h1>
+      <div id="data"></div>
+    </div>
+
+
+    <script>
+    var jhistory = [];
+    var socket = io();
+    socket.on('data-updated', function(j){
+      jhistory.push(j);
+      updateData();
+    });
+    function updateData(){
+      console.log("hERe");
+      for(var i = 0; i < jhistory.length; i++){
+        var curjson = jhistory[i];
+          console.log(curjson.teams);
+        $("#data").html("");
+        for(var key in curjson.teams){
+          var team = curjson.teams[key];
+          console.log(team.team_tier);
+          $("#data").append(teamString(team, key));
+        }
+      }
+    }
+    function teamString(x, y){
+      //console.log(x.team_current_score);
+      var final = ""
+      final += "<div class='team-container' id='"+y+"'>"
+      final += "<div class='row team-top text-center'>";
+      final += "<h2> Team "+y+"<br><small>"+x.team_state+" </small></h2>";
+      final += "</div>"
+      final += "<div class='row team-middle text-center'>";
+      final += "<div class='col-xs-6 left-col'>"
+      final += "<div class='team-division'><b>Division</b> <br> "+x.team_division+"</div>";
+      final += "<div class='team_tier'><b>Tier</b> <br>"+x.team_tier+"</div>";
+      final += "<div class='team_scored_images'><b>Scored Images</b> <br> "+x.team_scored_images+"</div>";
+      final += "</div></div>"
+
+      return final;
+    }
+    </script>
+  </body>
+</html>
