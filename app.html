@@ -4,51 +4,173 @@
     <title>CyPat Score Scraper</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js" integrity="sha256-N4u5BjTLNwmGul6RgLoESPNqDFVUibVuOYhP4gJgrew=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js" integrity="sha256-WPeFPWD3PZQUDrpFnDM1N2KadNVwCfNS4cCZ78b76T8=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" integrity="sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|VT323" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" integrity="sha256-dsOXGNHAo/syFnazt+KTBsCQeRmlcW1XKL0bCK4Baec=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/js/epoch.min.js" integrity="sha256-uKluQW6PgYqUnbaF80MDXVMg5/U2Jkl+mIX2qliGmJc=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/css/epoch.min.css" integrity="sha256-7Gigjgci9s9U+mXDEimBIp0+p2VICCmW4A3BLG2rbOg=" crossorigin="anonymous" />
+
+    <script src="https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js" integrity="sha256-65R1G5irU1VT+k8L4coqgd3saSvO/Wufson/w+v2Idw=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/odometer@0.4.8/themes/odometer-theme-default.css" integrity="sha256-Dt1y3ENkbkWd3zN47Ny+RSf7Wj5aFzL6zsVmnE5G6VI=" crossorigin="anonymous">
+
+    <style>
+
+
+
+    body {
+      background-color: #0B0B0B;
+      color: #B1C4BC;
+      font-family: 'Roboto Mono', monospace;
+    }
+    #main {
+      background-color: #0E0E0E;
+      color: #B1C4BC;
+    }
+    #header {
+      background-color: #0B0B0B;
+    }
+    </style>
   </head>
   <body>
-    <div class="container-fluid">
-      <h1 class="text-center">Cypat Scraper</h1>
-      <div id="data"></div>
+    <div class="container-fluid" id="main">
+      <div class="row align-items-center" id="header">
+        <div class="col-2 text-center">
+          <h1 class="display-4">STEMCOM</h1>
+        </div>
+        <div class="col-2 text-center">
+          <h3>CYBER PATRIOT COMMAND CENTER</h3>
+        </div>
+        <div class="col-2 text-center">
+          <small>OPERATION STATUS: NOMINAL</small>
+        </div>
+        <div class="col-2 text-center">
+          <small> ver. 2018.11.27.1</small>
+        </div>
+        <div class="col-2 text-center">
+          <p class="h3" id="ltime"></p><small>LOCAL TIME</small>
+        </div>
+        <div class="col-2 text-center">
+          <p class="h3" id="lcomp"></p><small id="lsub">COMPETITION CLOCK</small>
+        </div>
+      </div>
+      <div class="row justify-content-start" id="data">
+      </div>
+      <div class="row" id="livegraph" style="height: 100px;">
+        <div class="col epoch category10" id="gr_area" style="height: 100px;"></div>
+      </div>
     </div>
 
+    <!--clock script-->
+    <script>
+    function tick(){
+      var locale = moment();
+      console.log("hi");
+      $("#ltime").html(moment().format("HH:mm:ss"));
+
+      var starttime = moment("7 Dec 18 16:00 MST");
+      var endtime = moment("7 Dec 18 22:00 MST");
+
+      if(moment().isAfter(endtime)){
+        $("#lcomp").html("T+"+moment().from(endtime,true));
+        $("#lsub").html("COMPETITION IS OVER");
+      }else if(moment().isAfter(starttime)){
+        $("#lcomp").html("T-"+moment().to(endtime,true));
+        $("#lsub").html("COMPETITION IN PROGRESS");
+      }else{
+        $("#lcomp").html("T-"+moment().to(starttime,true));
+        $("#lsub").html("COMPETITION TO BEGIN");
+      }
+    }
+    setInterval(tick,1000);
+    </script>
 
     <script>
     var jhistory = [];
     var socket = io();
+
     socket.on('data-updated', function(j){
-      jhistory.push(j);
+      j["time"] = Date.now();
+      jhistory.unshift(j);
+      if(jhistory.length > 20){
+        jhistory.pop();
+      }
       updateData();
     });
+
+    //Team Names
+    var teamnums = {"11-0735":"Varun","11-0736":"Forfnud","11-0738":"SYN-SN-ACK","11-0739":"GG') DROP TABLE *;","11-0740":"Antidisestablishmentarianism", "11-4576":"Beschutzer der Daten?","11-4577":"Fedora"};
+    var teamnums_short = {"11-0735":"VARUN","11-0736":"FRFND","11-0738":"SNSNK","11-0739":"GG)DT","11-0740":"ANTID", "11-4576":"BSdD?","11-4577":"FDORA"};
+    //var teamnames = ["Varun", "Forfnud", "SYN-SN-ACK", "GG') DROP TABLE *;", "Antidisestablishmentarianism", "Beschutzer der Daten?", "Fedora"];
+
+    var gdata = [];
+    createGraph();
+    function createGraph(){
+        gdata = [
+          {"label":"VARUN", values:[]},
+          {"label":"FRFND", values:[]},
+          {label:"SNSNK", values:[]},
+          {label:"GG)DT", values:[]},
+          {label:"ANTID", values:[]},
+          {label:"BSdD?", values:[]},
+          {label:"FDORA", values:[]}
+        ];
+    }
+
+    function updateGraph(x){
+      for(var key in x.important){
+        var team = x.important[key];
+        var teamname = teamnums_short[key];
+        for(var i = 0; i < gdata.length; i++){
+          if(gdata[i].label == teamname){
+            gdata[i].values.push({time:x.time,y:team.total_score});
+            break;
+          }
+        }
+      }
+      $("#gr_area").epoch({
+        type: "time.line",
+        data: gdata
+      });
+    }
+
     function updateData(){
       console.log("hERe");
-      for(var i = 0; i < jhistory.length; i++){
+      for(var i = 0; i < 1; i++){
         var curjson = jhistory[i];
-          console.log(curjson.teams);
-        $("#data").html("");
-        for(var key in curjson.teams){
-          var team = curjson.teams[key];
+
+        $("#data").html("<div class='col sidebar1' id='sidebar1'><div class='team-top'><h1>TEAMS</h1></div><div class='team-item'><h3>SCORE</h3></div><div class='team-item'><h3>RANKING</h3></div></div>");
+        updateGraph(curjson);
+        for(var key in curjson.important){
+          var team = curjson.important[key];
           console.log(team.team_tier);
-          $("#data").append(teamString(team, key));
+          $("#data").append(teamString(team, teamnums_short[key], key));
+
+          //LIVE livegraph
+
+
         }
       }
     }
-    function teamString(x, y){
+    function teamString(x, y, z){
       //console.log(x.team_current_score);
       var final = ""
-      final += "<div class='team-container' id='"+y+"'>"
-      final += "<div class='row team-top text-center'>";
-      final += "<h2> Team "+y+"<br><small>"+x.team_state+" </small></h2>";
+      final += "<div class='col team-container' id='"+z+"'>"
+      final += "<div class='team-top'>";
+      final += "<h1>"+y+"</h1>";
       final += "</div>"
-      final += "<div class='row team-middle text-center'>";
-      final += "<div class='col-xs-6 left-col'>"
-      final += "<div class='team-division'><b>Division</b> <br> "+x.team_division+"</div>";
-      final += "<div class='team_tier'><b>Tier</b> <br>"+x.team_tier+"</div>";
-      final += "<div class='team_scored_images'><b>Scored Images</b> <br> "+x.team_scored_images+"</div>";
-      final += "</div></div>"
+      final+= "<div class='team-item h3 odometer'>"+x.total_score+"</div>";
+      final+= "<div class='team-item h3 odometer'>"+x.rank+" <small>"+(Math.round((1-(x.rank/4613))*1000)/10)+"%</small></div>";
+      //final+= "<div class='team-item h3 odometer'>"+(Math.round((1-(x.rank/4613))*1000)/10)+"</div>";
+      final+= "</div>";
 
       return final;
     }
