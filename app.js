@@ -8,7 +8,7 @@ var io = require('socket.io')(server);
 const util = require('util')
 
 //Store Overall Data in big JSON thing
-var importantteams = ["11-1327", "11-0735","11-0736","11-0738","11-0739","11-0740", "11-4576","11-4577"];
+var importantteams = ["11-0735","11-0736","11-0738","11-0739","11-0740", "11-4576","11-4577"];
 var json = {"teams":{}, "important":{}};
 
 if(fs.existsSync("recover.json")){
@@ -22,7 +22,7 @@ if(fs.existsSync("recover.json")){
 
 scrape();
 //Scrape CyperPatriot every 25 seconds, this is the live portion
-setInterval(scrape, 25000);
+setInterval(scrape, 20000);
 
 
 // function spinCycle(){
