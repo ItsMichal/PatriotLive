@@ -8,7 +8,7 @@ var io = require('socket.io')(server);
 const util = require('util')
 
 //Store Overall Data in big JSON thing
-var importantteams = ["11-0735","11-0736","11-0738","11-0739","11-0740", "11-4576","11-4577"];
+var importantteams = ["11-1327", "11-0735","11-0736","11-0738","11-0739","11-0740", "11-4576","11-4577"];
 var json = {"teams":{}, "important":{}};
 
 if(fs.existsSync("recover.json")){
@@ -21,8 +21,8 @@ if(fs.existsSync("recover.json")){
 }
 
 scrape();
-//Scrape CyperPatriot every 10 seconds, this is the live portion
-//setInterval(scrape, 10000);
+//Scrape CyperPatriot every 25 seconds, this is the live portion
+setInterval(scrape, 25000);
 
 
 // function spinCycle(){
@@ -103,9 +103,9 @@ function scrapeHTML(x){
     var team_play_time = $($(tdata).children()[6]).text();
     var team_warning = $($(tdata).children()[7]).text();
     var team_ccs_score = $($(tdata).children()[8]).text();
-    var team_adjust = $($(tdata).children()[9]).text();
-    var team_cisco_score = $($(tdata).children()[10]).text();
-    var team_total_score = $($(tdata).children()[11]).text();
+    //var team_adjust = $($(tdata).children()[9]).text();
+    //var team_cisco_score = $($(tdata).children()[10]).text();
+    //var team_total_score = $($(tdata).children()[11]).text();
     var team_data = {
                     "rank":team_rank,
                     "state":team_state,
@@ -114,10 +114,11 @@ function scrapeHTML(x){
                     "scored_images":team_scored_images,
                     "play_time":team_play_time,
                     "warning":team_warning,
-                    "ccs_score":team_ccs_score,
-                    "adjust":team_adjust,
-                    "cisco_score":team_cisco_score,
-                    "total_score":team_total_score};
+                    "ccs_score":team_ccs_score//,
+                    //"adjust":team_adjust,
+                    //"cisco_score":team_cisco_score,
+                    //"total_score":team_total_score
+                  };
     json.teams[team_id] = team_data;
 
     //if we are looking at an important team...

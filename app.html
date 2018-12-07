@@ -15,9 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" integrity="sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|VT323" rel="stylesheet">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" integrity="sha256-dsOXGNHAo/syFnazt+KTBsCQeRmlcW1XKL0bCK4Baec=" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/js/epoch.min.js" integrity="sha256-uKluQW6PgYqUnbaF80MDXVMg5/U2Jkl+mIX2qliGmJc=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/css/epoch.min.css" integrity="sha256-7Gigjgci9s9U+mXDEimBIp0+p2VICCmW4A3BLG2rbOg=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js" integrity="sha256-MZo5XY1Ah7Z2Aui4/alkfeiq3CopMdV/bbkc/Sh41+s=" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js" integrity="sha256-65R1G5irU1VT+k8L4coqgd3saSvO/Wufson/w+v2Idw=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/odometer@0.4.8/themes/odometer-theme-default.css" integrity="sha256-Dt1y3ENkbkWd3zN47Ny+RSf7Wj5aFzL6zsVmnE5G6VI=" crossorigin="anonymous">
@@ -30,6 +28,7 @@
       background-color: #0B0B0B;
       color: #B1C4BC;
       font-family: 'Roboto Mono', monospace;
+      overflow: hidden;
     }
     #main {
       background-color: #0E0E0E;
@@ -37,6 +36,9 @@
     }
     #header {
       background-color: #0B0B0B;
+    }
+    #bar-container{
+      background-color: red;
     }
     </style>
   </head>
@@ -64,8 +66,11 @@
       </div>
       <div class="row justify-content-start" id="data">
       </div>
-      <div class="row" id="livegraph" style="height: 100px;">
+      <!-- <div class="row" id="livegraph" style="height: 100px;">
         <div class="col epoch category10" id="gr_area" style="height: 100px;"></div>
+      </div> -->
+      <div class="row" id="bars">
+        <canvas id="myChart" width="1920" height="800"></canvas>
       </div>
     </div>
 
@@ -98,6 +103,7 @@
     var socket = io();
 
     socket.on('data-updated', function(j){
+      console.log("RECEIVED NEW DATA");
       j["time"] = Date.now();
       jhistory.unshift(j);
       if(jhistory.length > 20){
@@ -107,15 +113,98 @@
     });
 
     //Team Names
-    var teamnums = {"11-0735":"Varun","11-0736":"Forfnud","11-0738":"SYN-SN-ACK","11-0739":"GG') DROP TABLE *;","11-0740":"Antidisestablishmentarianism", "11-4576":"Beschutzer der Daten?","11-4577":"Fedora"};
-    var teamnums_short = {"11-0735":"VARUN","11-0736":"FRFND","11-0738":"SNSNK","11-0739":"GG)DT","11-0740":"ANTID", "11-4576":"BSdD?","11-4577":"FDORA"};
+    var teamnums = {"11-1327":"TEST", "11-0735":"Varun","11-0736":"Forfnud","11-0738":"SYN-SN-ACK","11-0739":"GG') DROP TABLE *;","11-0740":"Antidisestablishmentarianism", "11-4576":"Beschutzer der Daten?","11-4577":"Fedora"};
+    var teamnums_short = {"11-1327":"TEST","11-0735":"VARUN","11-0736":"FRFND","11-0738":"SNSNK","11-0739":"GG)DT","11-0740":"ANTID", "11-4576":"BSdD?","11-4577":"FDORA"};
     //var teamnames = ["Varun", "Forfnud", "SYN-SN-ACK", "GG') DROP TABLE *;", "Antidisestablishmentarianism", "Beschutzer der Daten?", "Fedora"];
 
     var gdata = [];
-    createGraph();
+    //createGraph();
+    var clr = Chart.helpers.color;
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var lc = new Chart(ctx, {
+      type: 'line',
+      options:{
+        responsive: true,
+        scales: {
+					xAxes: [{
+						type: 'time',
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Date'
+						},
+						ticks: {
+							major: {
+								fontStyle: 'bold',
+								fontColor: '#FF0000'
+							}
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'value'
+						}
+					}]
+				}
+      },
+      data:{
+        //labels: ["VARUN", "FRFND", "SNSNK", "GG)DT", "ANTID", "BSdD?", "FDORA"],
+        backgroundColor: '#000000',
+        borderColor: "#B1C4BC",
+        datasets: [{
+          label: "TEST",
+          borderColor: "#000000",
+          backgroundColor: "#5e2bff",
+          data: []
+        },
+        {
+          label: "FRFND",
+          borderColor: "#000000",
+          backgroundColor: "#c04cfd",
+          data: []
+        },
+        {
+          label: "SNSNK",
+          borderColor: "#000000",
+          backgroundColor: "#fc6dab",
+          data: []
+        },
+        {
+          label: "GG)DT",
+          borderColor: "#000000",
+          backgroundColor: "#D6FFF6",
+          data: []
+        },
+        {
+          label: "ANTID",
+          borderColor: "#000000",
+          backgroundColor: "#87F1FF",
+          data: []
+        },
+        {
+          label: "BSdD?",
+          borderColor: "#000000",
+          backgroundColor: "#EFD2CB",
+          data: []
+        },
+        {
+          label: "FDORA",
+          borderColor: "#000000",
+          backgroundColor: "#B49FCC",
+          data: []
+        }]
+      }
+    });
+
     function createGraph(){
+
+
+
+
         gdata = [
-          {"label":"VARUN", values:[]},
+          {"label":"TEST", values:[]},
           {"label":"FRFND", values:[]},
           {label:"SNSNK", values:[]},
           {label:"GG)DT", values:[]},
@@ -129,17 +218,18 @@
       for(var key in x.important){
         var team = x.important[key];
         var teamname = teamnums_short[key];
-        for(var i = 0; i < gdata.length; i++){
-          if(gdata[i].label == teamname){
-            gdata[i].values.push({time:x.time,y:team.total_score});
+        for(var i = 0; i < lc.data.datasets.length; i++){
+          if(lc.data.datasets[i].label == teamname){
+            lc.data.datasets[i].data.push({t:x.time,y:team.ccs_score});
+            if(lc.data.datasets[i].data.length > 90){
+              console.log("POPPING");
+              lc.data.datasets[i].data.pop();
+            }
+            lc.update();
             break;
           }
         }
       }
-      $("#gr_area").epoch({
-        type: "time.line",
-        data: gdata
-      });
     }
 
     function updateData(){
@@ -147,7 +237,7 @@
       for(var i = 0; i < 1; i++){
         var curjson = jhistory[i];
 
-        $("#data").html("<div class='col sidebar1' id='sidebar1'><div class='team-top'><h1>TEAMS</h1></div><div class='team-item'><h3>SCORE</h3></div><div class='team-item'><h3>RANKING</h3></div></div>");
+        $("#data").html("<div class='col-1 sidebar1' id='sidebar1'><div class='team-top'><h1>TEAMS</h1></div><div class='team-item'><h3>SCORE</h3></div><div class='team-item'><h3>RANKING</h3></div><div class='team-item'><h3>%DONE</h3></div><div class='team-item'><h3>PREDICTION</h3></div></div>");
         updateGraph(curjson);
         for(var key in curjson.important){
           var team = curjson.important[key];
@@ -163,17 +253,35 @@
     function teamString(x, y, z){
       //console.log(x.team_current_score);
       var final = ""
-      final += "<div class='col team-container' id='"+z+"'>"
+      final += "<div class='col team-container text-center' id='"+z+"'>"
       final += "<div class='team-top'>";
       final += "<h1>"+y+"</h1>";
       final += "</div>"
-      final+= "<div class='team-item h3 odometer'>"+x.total_score+"</div>";
-      final+= "<div class='team-item h3 odometer'>"+x.rank+" <small>"+(Math.round((1-(x.rank/4613))*1000)/10)+"%</small></div>";
+      final+= "<div class='team-item h3 odometer'>"+x.ccs_score+"</div>";
+      final+= "<div class='team-item h3 odometer'>P"+x.rank+" <small>T"+(Math.round(((x.rank/4613))*1000)/10)+"%</small></div>";
+      final+= "<div class='team-item h3 odometer'>"+(Math.round(((x.ccs_score/300))*1000)/10)+"%</div>";
+      var projected = "SILV";
+      if((Math.round(((1-x.rank/4613))*1000)/10) > 33.3){
+        projected = "GOLD";
+        if((Math.round(((1-x.rank/4613))*1000)/10) > 66.6){
+          projected = "PLAT";
+        }
+      }
+
+      final+= "<div class='team-item h3 odometer'>"+projected+"</div>";
+
+
       //final+= "<div class='team-item h3 odometer'>"+(Math.round((1-(x.rank/4613))*1000)/10)+"</div>";
       final+= "</div>";
 
       return final;
     }
+
+    // function bars(x, y){
+    //   var final="";
+    //   final += "<div class='col bar-container text-center' id='"+z+"'>"
+    //   final += "<div class=' '
+    // }
     </script>
   </body>
 </html>
