@@ -172,6 +172,6 @@ app.get('/', function(req, res){
   res.sendFile((__dirname +'/app.html'));
 });
 
-server.listen(3000, function(){
+server.listen((process.env.PORT || 8000), function(){
   console.log("now listening");
 });
