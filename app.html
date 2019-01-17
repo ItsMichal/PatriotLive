@@ -81,8 +81,8 @@
       console.log("hi");
       $("#ltime").html(moment().format("HH:mm:ss"));
 
-      var starttime = moment("7 Dec 18 16:00 MST");
-      var endtime = moment("7 Dec 18 22:00 MST");
+      var starttime = moment("17 Jan 19 16:00 MST");
+      var endtime = moment("17 Jan 19 22:00 MST");
 
       if(moment().isAfter(endtime)){
         $("#lcomp").html("T+"+moment().from(endtime,true));
@@ -129,6 +129,7 @@
 					xAxes: [{
 						type: 'time',
 						display: true,
+            stacked: true,
 						scaleLabel: {
 							display: true,
 							labelString: 'Date'
@@ -142,6 +143,7 @@
 					}],
 					yAxes: [{
 						display: true,
+            stacked: false,
 						scaleLabel: {
 							display: true,
 							labelString: 'value'
@@ -155,44 +157,41 @@
         borderColor: "#B1C4BC",
         datasets: [{
           label: "VARUN",
-          borderColor: "#000000",
-          backgroundColor: "#5e2bff",
+
+          borderColor: "#5e2bff",
           data: []
         },
         {
           label: "FRFND",
-          borderColor: "#000000",
-          backgroundColor: "#c04cfd",
+          borderColor: "#c04cfd",
           data: []
         },
         {
           label: "SNSNK",
-          borderColor: "#000000",
-          backgroundColor: "#fc6dab",
+
+          borderColor: "#fc6dab",
           data: []
         },
         {
           label: "GG)DT",
-          borderColor: "#000000",
-          backgroundColor: "#D6FFF6",
+            borderColor: "#D6FFF6",
           data: []
         },
         {
           label: "ANTID",
-          borderColor: "#000000",
-          backgroundColor: "#87F1FF",
+
+            borderColor: "#87F1FF",
           data: []
         },
         {
           label: "BSdD?",
-          borderColor: "#000000",
-          backgroundColor: "#EFD2CB",
+
+            borderColor: "#EFD2CB",
           data: []
         },
         {
           label: "FDORA",
-          borderColor: "#000000",
-          backgroundColor: "#B49FCC",
+          borderColor: "#B49FCC",
           data: []
         }]
       }
@@ -204,23 +203,26 @@
 
 
         gdata = [
-          {"label":"TEST", values:[]},
           {"label":"FRFND", values:[]},
           {label:"SNSNK", values:[]},
           {label:"GG)DT", values:[]},
           {label:"ANTID", values:[]},
           {label:"BSdD?", values:[]},
-          {label:"FDORA", values:[]}
+          {label:"FDORA", values:[]},
         ];
     }
 
     function updateGraph(x){
+      var popped = false;
       for(var key in x.important){
         var team = x.important[key];
         var teamname = teamnums_short[key];
         for(var i = 0; i < lc.data.datasets.length; i++){
           if(lc.data.datasets[i].label == teamname){
-            lc.data.datasets[i].data.push({t:x.time,y:team.ccs_score});
+            if(lc.data.datasets[i].data.length == 0 || lc.data.datasets[i].data[lc.data.datasets[i].data.length-1].y != team.ccs_score || popped == true){
+              lc.data.datasets[i].data.push({t:x.time,y:team.ccs_score});
+              popped = true;
+            }
             if(lc.data.datasets[i].data.length > 90){
               console.log("POPPING");
               lc.data.datasets[i].data.pop();
@@ -237,7 +239,7 @@
       for(var i = 0; i < 1; i++){
         var curjson = jhistory[i];
 
-        $("#data").html("<div class='col-1 sidebar1' id='sidebar1'><div class='team-top'><h1>TEAMS</h1></div><div class='team-item'><h3>SCORE</h3></div><div class='team-item'><h3>RANKING</h3></div><div class='team-item'><h3>%DONE</h3></div><div class='team-item'><h3>PREDICTION</h3></div></div>");
+        $("#data").html("<div class='col-1 sidebar1' id='sidebar1'><div class='team-top'><h1>TEAMS</h1></div><div class='team-item'><h3>SCORE</h3></div><div class='team-item'><h3>RANKING</h3></div><div class='team-item'><h3>%DONE</h3></div><div class='team-item'><h3>PREDICTION</h3></div><div class='team-item'><h3>TIER</h3></div></div>");
         updateGraph(curjson);
         for(var key in curjson.important){
           var team = curjson.important[key];
@@ -260,15 +262,14 @@
       final+= "<div class='team-item h3 odometer'>"+x.ccs_score+"</div>";
       final+= "<div class='team-item h3 odometer'>P"+x.rank+" <small>T"+(Math.round(((x.rank/4613))*1000)/10)+"%</small></div>";
       final+= "<div class='team-item h3 odometer'>"+(Math.round(((x.ccs_score/300))*1000)/10)+"%</div>";
-      var projected = "SILV";
-      if((Math.round(((1-x.rank/4613))*1000)/10) > 33.3){
-        projected = "GOLD";
-        if((Math.round(((1-x.rank/4613))*1000)/10) > 66.6){
-          projected = "PLAT";
-        }
+      var projected = "IN";
+      console.log(Math.round(((x.rank/4613))*1000)/10);
+      if((Math.round(((x.rank/4613))*1000)/10) > 25){
+        projected = "OUT";
       }
-
+      final+= "<div class='team-item h3 odometer'>"+x.tier+"</div>"
       final+= "<div class='team-item h3 odometer'>"+projected+"</div>";
+
 
 
       //final+= "<div class='team-item h3 odometer'>"+(Math.round((1-(x.rank/4613))*1000)/10)+"</div>";

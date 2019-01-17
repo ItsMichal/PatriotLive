@@ -64,7 +64,7 @@ function scrapeHTML(x){
   }
 //  console.log($(tbody).contents().length);
   //$(tib)
-  var rnkctr = [0,0,0,0]
+  var rnkctr = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
   for(var i = 1; i < $(tbody).children().length; i++){
     var tdata = $(tbody).children()[i];
     var team_id = $($(tdata).children()[1]).text();
@@ -76,29 +76,108 @@ function scrapeHTML(x){
     var team_division = $($(tdata).children()[3]).text();
 
     var team_rank = 0;
+    var team_tier = $($(tdata).children()[4]).text();
+    //console.log(team_tier);
     switch(team_division[0]){
       case "A":
-        rnkctr[0]++;
-        team_rank = rnkctr[0];
+
+        switch(team_tier[0]){
+          case "P":
+            rnkctr[0][0]++;
+            team_rank = rnkctr[0][0];
+            break;
+          case "G":
+            rnkctr[0][1]++;
+            team_rank = rnkctr[0][1];
+            break;
+          case "S":
+            rnkctr[0][2]++;
+            team_rank = rnkctr[0][2];
+            break;
+          case "M":
+            rnkctr[0][3]++;
+            team_rank = rnkctr[0][3];
+            break;
+          default:
+            console.log("Incategorized Team - " +team_id);
+            break;
+        }
         break;
       case "C":
-          rnkctr[1]++;
-          team_rank = rnkctr[1];
+          switch(team_tier[0]){
+            case "P":
+              rnkctr[1][0]++;
+              team_rank = rnkctr[1][0];
+              break;
+            case "G":
+              rnkctr[1][1]++;
+              team_rank = rnkctr[1][1];
+              break;
+            case "S":
+              rnkctr[1][2]++;
+              team_rank = rnkctr[1][2];
+              break;
+            case "M":
+              rnkctr[1][3]++;
+              team_rank = rnkctr[1][3];
+              break;
+            default:
+              console.log("Incategorized Team - " +team_id);
+              break;
+          }
           break;
       case "O":
-          rnkctr[2]++;
-          team_rank = rnkctr[2];
+          switch(team_tier[0]){
+            case "P":
+              rnkctr[2][0]++;
+              team_rank = rnkctr[2][0];
+              break;
+            case "G":
+              rnkctr[2][1]++;
+              team_rank = rnkctr[2][1];
+              break;
+            case "S":
+              rnkctr[2][2]++;
+              team_rank = rnkctr[2][2];
+              break;
+            case "M":
+              rnkctr[2][3]++;
+              team_rank = rnkctr[2][3];
+              break;
+            default:
+              console.log("Incategorized Team - " +team_id);
+              break;
+          }
           break;
       case "M":
-          rnkctr[3]++;
-          team_rank = rnkctr[3];
+          switch(team_tier[0]){
+            case "P":
+              rnkctr[3][0]++;
+              team_rank = rnkctr[3][0];
+              break;
+            case "G":
+              rnkctr[3][1]++;
+              team_rank = rnkctr[3][1];
+              break;
+            case "S":
+              rnkctr[3][2]++;
+              team_rank = rnkctr[3][2];
+              break;
+            case "M":
+              rnkctr[3][3]++;
+              team_rank = rnkctr[3][3];
+              break;
+            default:
+              console.log("Incategorized Team - " +team_id);
+              break;
+          }
           break;
       default:
           console.log("Invalid Ranking Team - "+team_id);
           break;
     }
 
-    var team_tier = $($(tdata).children()[4]).text();
+
     var team_scored_images = $($(tdata).children()[5]).text();
     var team_play_time = $($(tdata).children()[6]).text();
     var team_warning = $($(tdata).children()[7]).text();
@@ -106,6 +185,9 @@ function scrapeHTML(x){
     //var team_adjust = $($(tdata).children()[9]).text();
     //var team_cisco_score = $($(tdata).children()[10]).text();
     //var team_total_score = $($(tdata).children()[11]).text();
+
+
+
     var team_data = {
                     "rank":team_rank,
                     "state":team_state,
@@ -115,6 +197,7 @@ function scrapeHTML(x){
                     "play_time":team_play_time,
                     "warning":team_warning,
                     "ccs_score":team_ccs_score//,
+                    //"score_history":team_score_history//,
                     //"adjust":team_adjust,
                     //"cisco_score":team_cisco_score,
                     //"total_score":team_total_score
@@ -136,6 +219,7 @@ function scrapeHTML(x){
   var bckup = JSON.stringify(json);
   fs.writeFile("backup.json", bckup, 'utf8', err =>{if(err){throw err;}});
   console.log("[INFO] FINISHED SCRAPING");
+
   //util.inspect(json, {showHidden: false, depth: null})
   return json;
 }
@@ -172,6 +256,6 @@ app.get('/', function(req, res){
   res.sendFile((__dirname +'/app.html'));
 });
 
-server.listen((process.env.PORT || 8000), function(){
+server.listen((process.env.PORT || 3000), function(){
   console.log("now listening");
 });
