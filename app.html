@@ -266,11 +266,12 @@
       final+= "<div class='team-item h3 odometer'>"+(Math.round(((x.ccs_score/300))*1000)/10)+"%</div>";
       var projected = "IN";
       console.log(Math.round(((x.rank/4613))*1000)/10);
-      if((Math.round(((x.rank/4613))*1000)/10) > 25){
+      if((Math.round(((x.rank/4613))*1000)/10) < 25){
         projected = "OUT";
       }
-      final+= "<div class='team-item h3 odometer'>"+x.tier+"</div>"
       final+= "<div class='team-item h3 odometer'>"+projected+"</div>";
+      final+= "<div class='team-item h3 odometer'>"+x.tier+"</div>"
+
 
 
 
